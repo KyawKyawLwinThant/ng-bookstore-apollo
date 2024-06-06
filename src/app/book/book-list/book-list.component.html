@@ -2,7 +2,8 @@
     <div class="row">
         @for (book of (books$ | async); track $index) {
         <div class="col-md-4">
-            <app-book-card [book]="book"></app-book-card>
+            <app-book-card [book]="book"
+                           (bookId)="addToCart($event)"></app-book-card>
         </div>
         }
     </div>

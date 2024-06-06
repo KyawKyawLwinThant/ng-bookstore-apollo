@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { Book } from '../../book';
 import { Apollo } from 'apollo-angular';
 import { GET_ALL_BOOKS } from '../../../graphql/graphql.opertions';
@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { BookCardComponent } from "../book-card/book-card.component";
 import {BookService} from "../../service/book.service";
 import {Observable} from "rxjs";
+import {CartObservableService} from "../../service/cart-observable.service";
 
 @Component({
     selector: 'app-book-list',
@@ -17,26 +18,28 @@ import {Observable} from "rxjs";
 export class BookListComponent {
 
   books:Book[] = []
+  book!:Book;
 
   books$:Observable<Book[]> = this.bookService.books$
 
-  constructor(private bookService:BookService){
 
+
+  constructor(private bookService:BookService,
+              private cartService:CartObservableService){
+
+  }
+  addToCart(id:string){
+     this.bookService.getBookById(id)
+       .subscribe(data => this.book = data);
+     this.cartService.addToCart(this.book);
   }
 
   ngOnInit(): void {
-    //this.loadAllBooks();
+
  }
 
- // loadAllBooks(){
- //   this.apollo.watchQuery<any>({
- //     query:GET_ALL_BOOKS
- //   })
- //   .valueChanges.subscribe({
- //     next: result => this.books = result.data?.allBooks,
- //     error: error => console.log(error),
- //     complete: () => console.log("Completed!")
- //   })
- // }
+
+
+
 
 }

@@ -1,4 +1,4 @@
-import { Component, Input, input } from '@angular/core';
+import {Component, EventEmitter, Input, input, Output} from '@angular/core';
 import { Book } from '../../book';
 import { CommonModule } from '@angular/common';
 
@@ -12,5 +12,12 @@ import { CommonModule } from '@angular/common';
 export class BookCardComponent {
   @Input()
   book!:Book;
+
+  @Output()
+  bookId:EventEmitter<string>=new EventEmitter<string>();
+
+  sendBookIdToParent(id:string|undefined){
+    this.bookId.emit(id as string);
+  }
 
 }

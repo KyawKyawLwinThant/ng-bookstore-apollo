@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Apollo} from "apollo-angular";
-import {map, Observable, of} from "rxjs";
+import {BehaviorSubject, map, Observable, of, shareReplay} from "rxjs";
 import {Book} from "../book";
 import {GET_ALL_BOOKS} from "../../graphql/graphql.opertions";
 
@@ -8,18 +8,28 @@ import {GET_ALL_BOOKS} from "../../graphql/graphql.opertions";
   providedIn: 'root'
 })
 export class BookService {
-
-  books$!: Observable<Book[]>;
+  #bookSubject:BehaviorSubject<Book[]>=
+    new BehaviorSubject<Book[]>([]);
+  books$: Observable<Book[]>=this.#bookSubject.asObservable();
 
   constructor(private apollo: Apollo) {
-     this.books$ = this.loadAllBooks();
+      this.loadAllBooks()
+        .subscribe(data => this.#bookSubject.next(data))
+  }
+
+  getBookById(id:String):Observable<Book>{
+    return this.books$
+      .pipe(
+        map(books => books.find(b => b.id === id) as Book)
+      ) ;
   }
 
   loadAllBooks(): Observable<Book[]> {
     return this.apollo.watchQuery<any>({
       query: GET_ALL_BOOKS
     }).valueChanges.pipe(
-      map((result) => result.data?.allBooks
+      shareReplay(),
+      map((result) => result.data?.allBooks,
       )
     )
 
