@@ -4,6 +4,8 @@ import { Apollo } from 'apollo-angular';
 import { GET_ALL_BOOKS } from '../../../graphql/graphql.opertions';
 import { CommonModule } from '@angular/common';
 import { BookCardComponent } from "../book-card/book-card.component";
+import {BookService} from "../../service/book.service";
+import {Observable} from "rxjs";
 
 @Component({
     selector: 'app-book-list',
@@ -16,23 +18,25 @@ export class BookListComponent {
 
   books:Book[] = []
 
-  constructor(private apollo:Apollo){
+  books$:Observable<Book[]> = this.bookService.books$
+
+  constructor(private bookService:BookService){
 
   }
 
   ngOnInit(): void {
-    this.loadAllBooks();
+    //this.loadAllBooks();
  }
 
- loadAllBooks(){
-   this.apollo.watchQuery<any>({
-     query:GET_ALL_BOOKS
-   })
-   .valueChanges.subscribe({
-     next: result => this.books = result.data?.allBooks,
-     error: error => console.log(error),
-     complete: () => console.log("Completed!")
-   })
- }
+ // loadAllBooks(){
+ //   this.apollo.watchQuery<any>({
+ //     query:GET_ALL_BOOKS
+ //   })
+ //   .valueChanges.subscribe({
+ //     next: result => this.books = result.data?.allBooks,
+ //     error: error => console.log(error),
+ //     complete: () => console.log("Completed!")
+ //   })
+ // }
 
 }
