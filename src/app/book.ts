@@ -4,6 +4,7 @@ export type Book = {
     price?:number,
     imgUrl?:string,
     publishedDate?:Date,
+    quantity?:number,
     author?:Author
 }
 type Author={

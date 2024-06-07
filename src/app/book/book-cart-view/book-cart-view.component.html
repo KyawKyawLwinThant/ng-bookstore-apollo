@@ -1,0 +1,36 @@
+
+
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <h3>Cart View</h3>
+        </div>
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for(book of books;track $index){
+              <tr>
+                <td>{{book.title}}</td>
+                <td>{{book.price}}</td>
+                <td><input type="text" name="quantity"
+                class="form-control" [(ngModel)]="book.quantity"></td>
+                <td> <button class="btn btn-outline-danger">Delete</button></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        <span>Total {{total | currency}}</span>
+      </div>
+    </div>
+  </div>
+</div>

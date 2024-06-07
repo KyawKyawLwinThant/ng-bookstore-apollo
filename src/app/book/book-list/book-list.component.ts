@@ -30,7 +30,9 @@ export class BookListComponent {
   }
   addToCart(id:string){
      this.bookService.getBookById(id)
-       .subscribe(data => this.book = data);
+       .subscribe(data => {
+         this.book = data;
+       });
      this.cartService.addToCart(this.book);
   }
 
